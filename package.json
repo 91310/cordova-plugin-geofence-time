@@ -1,0 +1,78 @@
+{
+  "_from": "cordova-plugin-geofence-time",
+  "_id": "cordova-plugin-geofence-time@0.0.1",
+  "_inBundle": false,
+  "_integrity": "sha1-z/6JwR0nbP9gFIR+kR7P3fzWPKs=",
+  "_location": "/cordova-plugin-geofence-time",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "raw": "cordova-plugin-geofence-time",
+    "rawSpec": "cordova-plugin-geofence-time",
+    "saveSpec": "cordova-plugin-geofence-time",
+    "fetchSpec": "cordova-plugin-geofence-time",
+    "gitCommittish": "master"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "cordova-plugin-geofence-time",
+  "_spec": "cordova-plugin-geofence-time",
+  "_where": ".\\node_modules",
+  "author": {
+    "name": "Cowbell Labs"
+  },
+  "bugs": {
+    "url": "https://github.com/cowbell/cordova-plugin-geofence/issues"
+  },
+  "bundleDependencies": false,
+  "cordova": {
+    "id": "cordova-plugin-geofence-time",
+    "platforms": [
+      "android",
+      "ios",
+      "wp8",
+      "windows8",
+      "windows"
+    ]
+  },
+  "deprecated": false,
+  "description": "Cordova geofence plugin time",
+  "devDependencies": {
+    "cordova": "^6.1.1",
+    "cordova-paramedic": "git+https://github.com/apache/cordova-paramedic.git"
+  },
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=5.0.0"
+    }
+  ],
+  "homepage": "https://github.com/cowbell/cordova-plugin-geofence#readme",
+  "keywords": [
+    "cordova",
+    "plugin",
+    "geofence",
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios",
+    "cordova-wp8",
+    "cordova-windows8",
+    "cordova-windows"
+  ],
+  "license": "Apache-2.0",
+  "name": "cordova-plugin-geofence-time",
+  "repository": {
+    "type": "tag",
+    "url": "cordova-plugin-geofence-time"
+  },
+  "scripts": {
+    "posttest": "sed -i 's/play-services-location:9.8.0/play-services-location:+/g' plugin.xml",
+    "pretest": "sed -i 's/play-services-location:+/play-services-location:9.8.0/g' plugin.xml",
+    "test": "cordova-paramedic --platform android@6.0 --plugin . --verbose",
+    "test:ios": "FIX_PARAMEDIC=true cordova-paramedic --platform ios --plugin . --verbose"
+  },
+  "typings": "./typings/cordova-plugin-geofence.d.ts",
+  "version": "0.0.1"
+}
