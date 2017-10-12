@@ -130,15 +130,6 @@
                 <string>remote-notification</string>
             </array>
         </config-file>
-        <config-file target="*-Info.plist" parent="UIStatusBarHidden">
-            <true/>
-        </config-file>
-        <config-file target="*-Info.plist" parent="UIViewControllerBasedStatusBarAppearance">
-            <false/>
-        </config-file>
-        <config-file target="*-Info.plist" parent="DisallowOverscroll">
-            <true/>
-        </config-file>
         <config-file target="config.xml" parent="/*">
           <feature name="GeofencePlugin">
             <param name="ios-package" value="HWPGeofencePlugin"/>
