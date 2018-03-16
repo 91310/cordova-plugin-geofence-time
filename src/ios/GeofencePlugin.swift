@@ -387,16 +387,83 @@ class GeoNotificationManager : NSObject, CLLocationManagerDelegate {
         log("Monitoring region " + region!.identifier + " failed \(error)" )
     }
 
+    func todaysDateFromString(time:NSString) ->Date {
+        let array = time.components(separatedBy: ":")
+        let now = Date()
+        var calendar = Calendar.current
+        calendar.timeZone = TimeZone.current
+        var components = calendar.dateComponents(([.year, .month, .day, .hour, .minute, .second]), from: now)
+        components.hour = Int(array[0])
+        components.minute = Int(array[1])
+        components.second = 0
+        return calendar.date(from:components)!
+    }
+    
+    func checkTimeWindow(timeWindow : JSON) -> Bool {
+        //callendar and formatter
+        var calendar = NSCalendar.current
+        calendar.timeZone = TimeZone.current
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "YYYY-MM-dd"
+        dateFormatter.timeZone = TimeZone(identifier: "UTC")
+        //get start date
+        let startDate : NSDate! = dateFormatter.date(from: timeWindow["startDate"].stringValue)! as NSDate
+        let weekDays = timeWindow["weekDays"]
+        let comps = NSDateComponents()
+        comps.day = timeWindow["interval"].intValue
+        
+        
+        //get end date
+        var dateFin = timeWindow["endDate"].stringValue
+        if timeWindow["endDate"].stringValue == "" {dateFin = "2099-12-31"}
+        let endDate : NSDate! = dateFormatter.date(from: dateFin)! as NSDate
+        
+        
+        //get today from components
+        //let unitFlags: NSCalendar.Unit = [.day, .month, .year]
+       
+        let today = Date()
+        
+        dateFormatter.dateFormat = "HH:mm"
+        
+        
+        if startDate.compare(today as Date) == ComparisonResult.orderedAscending {
+            if endDate.compare(today as Date) == ComparisonResult.orderedDescending {
+                let jour = Calendar.current.component(.weekday, from: today)
+                if weekDays[jour] == true {
+                    let startTime : Date! = self.todaysDateFromString(time: timeWindow["startTime"].stringValue as NSString)
+                    let endTime : Date! = self.todaysDateFromString(time: timeWindow["endTime"].stringValue as NSString)
+                    let currentTime : NSDate! = NSDate()
+                    
+                    log("Start: \(startTime)")
+                    log("End: \(endTime)")
+                    log("Now: \(currentTime)")
+                    
+                    if startTime.compare(currentTime as Date) == ComparisonResult.orderedAscending {
+                        if endTime.compare(currentTime as Date) == ComparisonResult.orderedDescending {
+                            return true
+                        }
+                    }
+                }
+                
+            }
+        }
+        return false
+        
+    }
+    
     func handleTransition(_ region: CLRegion!, transitionType: Int) {
         if var geoNotification = store.findById(region.identifier) {
             geoNotification["transitionType"].int = transitionType
-            
+            let timeWindow = geoNotification["timeWindow"]
+            if self.checkTimeWindow(timeWindow: timeWindow) {
                 if geoNotification["notification"].isExists() {
                     notifyAbout(geoNotification)
                 }
                 
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "handleTransition"), object: geoNotification.rawString(String.Encoding.utf8.rawValue, options: []))
             }
+        }
     }
 
     func notifyAbout(_ geo: JSON) {
