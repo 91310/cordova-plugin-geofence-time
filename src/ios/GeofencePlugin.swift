@@ -143,7 +143,7 @@ func log(_ messages: [String]) {
         log("didReceiveTransition")
         if let geoNotificationString = notification.object as? String {
 
-            let js = "setTimeout('geofence.onTransitionReceived([" + geoNotificationString + "])',0)"
+            let js = "setTimeout('geofence.onTransitionReceived([" + geoNotificationString + "])',1000)"
 
             evaluateJs(js)
         }
@@ -429,7 +429,7 @@ class GeoNotificationManager : NSObject, CLLocationManagerDelegate {
         
         if startDate.compare(today as Date) == ComparisonResult.orderedAscending {
             if endDate.compare(today as Date) == ComparisonResult.orderedDescending {
-                let jour = Calendar.current.component(.weekday, from: today)
+                let jour = Calendar.current.component(.weekday, from: today) - 1
                 if weekDays[jour] == true {
                     let startTime : Date! = self.todaysDateFromString(time: timeWindow["startTime"].stringValue as NSString)
                     let endTime : Date! = self.todaysDateFromString(time: timeWindow["endTime"].stringValue as NSString)
@@ -471,7 +471,12 @@ class GeoNotificationManager : NSObject, CLLocationManagerDelegate {
         let notification = UILocalNotification()
         notification.timeZone = TimeZone.current
         let dateTime = Date()
-        notification.fireDate = dateTime
+        let currentDate = Date()
+        var dateComponent = DateComponents()
+        dateComponent.second = 5
+        let dateToFire = Calendar.current.date(byAdding: dateComponent, to:currentDate)
+        
+        notification.fireDate = dateToFire
         notification.soundName = UILocalNotificationDefaultSoundName
         notification.alertBody = geo["notification"]["text"].stringValue
         if let json = geo["notification"]["data"] as JSON? {
